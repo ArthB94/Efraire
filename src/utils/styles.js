@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default StyleSheet.create({
     body: {
@@ -45,5 +46,13 @@ export default StyleSheet.create({
             color: '#fff',
             textAlign: 'center',
         },
-    }
+    },
+    graph:{
+        ...StyleSheet.view,
+        flex:1,
+        padding: 20,
+        borderRadius: 50,
+        backgroundColor:'#00000015'}
+    
+
 })
