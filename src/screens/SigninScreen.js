@@ -1,16 +1,18 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect ,useContext} from 'react';
 import { Text, View, Button, TextInput } from 'react-native';
 import styles from '../utils/styles';
 import db from '../utils/db';
 import SQLite from 'react-native-sqlite-storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CustomButton } from '../utils/components';
+import { GlobalContext } from '../App';
 
 
 
-export default function SinginScreen({ navigation ,route}) {
-    const[user,setUser] = useState(route.params.user)
+export default function SinginScreen({ navigation }) {
+    const [globalState, setGlobalState] = useContext(GlobalContext);
+    const[user,setUser] = useState(globalState.user);
     const isInDB = async () => {
         try {
             db.transaction((tx) => {
@@ -49,6 +51,8 @@ export default function SinginScreen({ navigation ,route}) {
                     );
                 });
                 alert('User ' + user.name + ' added successfully');
+                await AsyncStorage.setItem('user', JSON.stringify(user));
+                setGlobalState({ ...globalState, user: user })
                 navigation.navigate('Login')
             }
             catch (e) {
@@ -60,11 +64,11 @@ export default function SinginScreen({ navigation ,route}) {
         <View style={styles.body}>
             <Text style={styles.title}>Signin</Text>
             <Text >Username</Text>
-            <TextInput style={styles.textInput} onChangeText={name => setUsername(name)} value={user.name} />
+            <TextInput style={styles.textInput} onChangeText={name => setUser({...user,name:name})} value={user.name} />
             <Text >Age</Text>
-            <TextInput style={styles.textInput} onChangeText={age => setAge(age)} value={user.age} />
+            <TextInput style={styles.textInput} onChangeText={age => setUser({...user,age:age})} value={user.age} />
             <Text >Password</Text>
-            <TextInput style={styles.textInput} secureTextEntry={true} onChangeText={password => setPassword(password)} value={user.password} />
+            <TextInput style={styles.textInput} secureTextEntry={true} onChangeText={password => setUser({...user,password:password})} value={user.password} />
             <CustomButton style={styles.button} title='Signin' onPress={setData}/>
         </View>
     );

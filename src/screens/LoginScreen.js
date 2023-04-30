@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import { Text, View, Button, TextInput, Pressable } from 'react-native';
 import styles from '../utils/styles';
 import { showUsers, createTable, dropTable } from '../utils/queries'
 import db from '../utils/db';
 import { CustomButton } from '../utils/components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { GlobalContext } from '../App';
+
 
 
 
 export default function LoginScreen({ navigation }) {
-  const [user, setUser] = useState({ });
+  const [globalState, setGlobalState] = useContext(GlobalContext);
+  const [user, setUser] = useState(globalState.user);
 
   useEffect(() => {
     getData()
@@ -18,11 +21,27 @@ export default function LoginScreen({ navigation }) {
 
   const getData = async () => {
     try {
-      const value = await AsyncStorage.getItem('user')
-      console.log("getData 1" + JSON.stringify(JSON.parse(value)))
-      setUser(JSON.parse(value))
-      console.log("getData 2" + JSON.stringify(user))
-      connection()
+      //await AsyncStorage.setItem('user', JSON.stringify({id:0,name:'',age:'',password:''}))
+      const value = JSON.parse(await AsyncStorage.getItem('user'))
+      setUser(value)
+      db.transaction(async (tx) => {
+        tx.executeSql(
+          'SELECT * FROM Users WHERE Name = ? AND Password = ?',
+          [value.name, value.password],
+          async (tx, results) => {
+            var len = results.rows.length;
+            if (len > 0) {
+              for (i = 0; i < len; i++) {
+                console.log("ID "+results.rows.item(0).ID+" Name: " + results.rows.item(i).Name + " Age: " + results.rows.item(i).Age + " Password: " + results.rows.item(i).Password);
+              }
+              await AsyncStorage.setItem('user', JSON.stringify(value));
+              setGlobalState({ ...globalState, user: value })
+              navigation.navigate('InApp')
+            }
+          }
+        );
+      });
+
     } catch (e) {
       console.log(e)
     }
@@ -40,11 +59,8 @@ export default function LoginScreen({ navigation }) {
                 for (i = 0; i < len; i++) {
                   console.log("ID "+results.rows.item(0).ID+" Name: " + results.rows.item(i).Name + " Age: " + results.rows.item(i).Age + " Password: " + results.rows.item(i).Password);
                 }
-                console.log("connection 1" + JSON.stringify(user))
-                setUser({...user, id: results.rows.item(0).ID,age: results.rows.item(0).Age })
-                console.log("connection 2" + JSON.stringify(user))
-                await AsyncStorage.setItem('user', JSON.stringify(user));
-                navigation.navigate('InApp', { user: user })
+                await AsyncStorage.setItem('user', JSON.stringify({...user, id: results.rows.item(0).ID, age: results.rows.item(0).Age }));
+                navigation.navigate('InApp', { user: {...user, id: results.rows.item(0).ID, age: results.rows.item(0).Age } })
               }
               else {
                 alert('Username: '+user.name+' or password: '+' incorrect');
@@ -62,6 +78,7 @@ export default function LoginScreen({ navigation }) {
 
 
   return (
+  
     <View style={styles.body}>
       <Text style={styles.title}>Login</Text>
       <Text >Username</Text>
