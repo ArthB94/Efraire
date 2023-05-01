@@ -16,7 +16,7 @@ export default function AccountScreen ({navigation,route}) {
 
   const disconnect = async () => {
     try {
-      await AsyncStorage.setItem('user', JSON.stringify({id:0,name:'',age:'',password:''}));
+      await AsyncStorage.setItem('user', JSON.stringify({id:-1,name:'',age:'',password:''}));
       navigation.navigate('Login')
     }
     catch (e) {

@@ -53,6 +53,7 @@ export default function SinginScreen({ navigation }) {
                 alert('User ' + user.name + ' added successfully');
                 await AsyncStorage.setItem('user', JSON.stringify(user));
                 setGlobalState({ ...globalState, user: user })
+                console.log('setData user ' + JSON.stringify(globalState));
                 navigation.navigate('Login')
             }
             catch (e) {
@@ -66,7 +67,7 @@ export default function SinginScreen({ navigation }) {
             <Text >Username</Text>
             <TextInput style={styles.textInput} onChangeText={name => setUser({...user,name:name})} value={user.name} />
             <Text >Age</Text>
-            <TextInput style={styles.textInput} onChangeText={age => setUser({...user,age:age})} value={user.age} />
+            <TextInput style={styles.textInput} onChangeText={age => setUser({...user,age:age})} value={user.age.toString()} />
             <Text >Password</Text>
             <TextInput style={styles.textInput} secureTextEntry={true} onChangeText={password => setUser({...user,password:password})} value={user.password} />
             <CustomButton style={styles.button} title='Signin' onPress={setData}/>

@@ -6,6 +6,7 @@ import db from '../utils/db';
 import { CustomButton } from '../utils/components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GlobalContext } from '../App';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 
@@ -15,39 +16,35 @@ export default function LoginScreen({ navigation }) {
   const [user, setUser] = useState(globalState.user);
 
   useEffect(() => {
-    getData()
-    createTable('Users', 'ID INTEGER PRIMARY KEY AUTOINCREMENT, Name VARCHAR(20) UNIQUE, Age INTEGER, Password VARCHAR(20)')
+    fetchData();
   }, [])
 
-  const getData = async () => {
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchData();
+    }, [])
+  ); 
+
+  const fetchData = async () => {
     try {
-      //await AsyncStorage.setItem('user', JSON.stringify({id:0,name:'',age:'',password:''}))
-      const value = JSON.parse(await AsyncStorage.getItem('user'))
-      setUser(value)
-      db.transaction(async (tx) => {
-        tx.executeSql(
-          'SELECT * FROM Users WHERE Name = ? AND Password = ?',
-          [value.name, value.password],
-          async (tx, results) => {
-            var len = results.rows.length;
-            if (len > 0) {
-              for (i = 0; i < len; i++) {
-                console.log("ID "+results.rows.item(0).ID+" Name: " + results.rows.item(i).Name + " Age: " + results.rows.item(i).Age + " Password: " + results.rows.item(i).Password);
-              }
-              await AsyncStorage.setItem('user', JSON.stringify(value));
-              setGlobalState({ ...globalState, user: value })
-              navigation.navigate('InApp')
-            }
-          }
-        );
-      });
-
-    } catch (e) {
-      console.log(e)
+      const userJson = await AsyncStorage.getItem('user');
+      const savedUser = JSON.parse(userJson);
+      console.log('useEffect savedUser ' + JSON.stringify(savedUser));
+      setGlobalState({...globalState,user:savedUser});
+      setUser(savedUser);
+      // Appel de la fonction de connexion
+      if (savedUser.id != -1){
+      await connection(savedUser);
     }
-  }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
-  const connection = async () => {
+   
+  
+
+  const connection = async (user) => {
       try {
         db.transaction(async (tx) => {
           tx.executeSql(
@@ -59,11 +56,15 @@ export default function LoginScreen({ navigation }) {
                 for (i = 0; i < len; i++) {
                   console.log("ID "+results.rows.item(0).ID+" Name: " + results.rows.item(i).Name + " Age: " + results.rows.item(i).Age + " Password: " + results.rows.item(i).Password);
                 }
-                await AsyncStorage.setItem('user', JSON.stringify({...user, id: results.rows.item(0).ID, age: results.rows.item(0).Age }));
-                navigation.navigate('InApp', { user: {...user, id: results.rows.item(0).ID, age: results.rows.item(0).Age } })
+                const state = {...user, id: results.rows.item(0).ID, age: results.rows.item(0).Age }
+                setGlobalState({...globalState,user:state})
+                await AsyncStorage.setItem('user', JSON.stringify(state));
+                navigation.navigate('InApp', { user: state })
               }
               else {
+                
                 alert('Username: '+user.name+' or password: '+' incorrect');
+                
               }
             }
           );
@@ -89,7 +90,7 @@ export default function LoginScreen({ navigation }) {
           if (user.name.length == 0 || user.password.length == 0){ 
           alert('Please fill all the fields')
         } 
-        else {alert('Login') ,connection()}}}/>
+        else {alert('Login') ,connection(user)}}}/>
       <CustomButton style={styles.button} title='CreatUser' onPress={() => { navigation.navigate('Signin', { user: user }) }} />
     </View>
 

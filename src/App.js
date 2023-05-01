@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React,{useState,createContext} from 'react';
+import React,{useEffect ,useState,createContext} from 'react';
 import  Connection  from './screens/LoginScreen';
 import  SinginScreen from './screens/SigninScreen';
 import  HomeScreen  from './screens/HomeScreen';
@@ -28,9 +28,8 @@ function InApp({route}){
 }
 //cette fonction et la première loadé par l'application et elle retourne la page 'Login' qui correspond à la page de connection et signin pour creer un compte
 function App() {  
-  const [globalState, setGlobalState] = useState({
-    user: {id:0,name:'',age:'',password:''},
-  });
+
+  const [globalState, setGlobalState] = useState({user: {id:-1,name:'',age:'',password:''},});
 
   return (
     <>

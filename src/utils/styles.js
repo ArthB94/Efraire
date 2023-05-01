@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
 
 export default StyleSheet.create({
     body: {
