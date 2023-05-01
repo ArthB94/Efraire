@@ -12,8 +12,11 @@ import 'react-native-gesture-handler';
 import { Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
 const Stack =  createStackNavigator();
 const Drawer = createDrawerNavigator();
+export const GlobalContext = createContext();
+
 export const GlobalContext = createContext();
 
 //cette fonction retourne la page 'InApp' qui correspond aux pages 'Home' et 'Account' apres la connection
@@ -33,13 +36,17 @@ function App() {
 
   return (
     <>
+    <>
     <NavigationContainer>
+    <GlobalContext.Provider value={[globalState, setGlobalState]}>
     <GlobalContext.Provider value={[globalState, setGlobalState]}>
       <Stack.Navigator screenOptions={{header:()=> null}}  initialRouteName="Login"  > 
         <Stack.Screen name="Login" component={Connection} />
         <Stack.Screen name="Signin" component={SinginScreen} />
         <Stack.Screen name="InApp" component={InApp} />
       </Stack.Navigator>
+      </GlobalContext.Provider>
+    </NavigationContainer></>
       </GlobalContext.Provider>
     </NavigationContainer></>
   );  
