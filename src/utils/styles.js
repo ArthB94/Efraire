@@ -13,12 +13,12 @@ export default StyleSheet.create({
         width: '100%',
     },
     title: {
-        color: '#000',
+        color: 'black',
         fontSize: 20,
         fontWeight: 'bold',
     },
     text: {
-        color: '#000',
+        color: 'black',
         fontSize: 15,
     },
     textInput: {
@@ -28,6 +28,7 @@ export default StyleSheet.create({
         borderWidth: 1,
         borderRadius: 10,
         margin: 10,
+        color: 'black',
     },
     button: {
         padding: 7,
@@ -52,7 +53,7 @@ export default StyleSheet.create({
         flex:1,
         padding: 20,
         borderRadius: 50,
-        backgroundColor:'#00000015'}
+        backgroundColor:'green'}
     
 
 })

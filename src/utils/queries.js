@@ -29,7 +29,13 @@ export const selectData = async (nameDB, variables, condition) => {
             tx.executeSql(
                 'SELECT ' + variables + ' FROM ' + nameDB + ' ' + condition,
                 (tx, results) => {
-                    return results
+                    var len = results.rows.length;
+                    var data = [];
+                    for (let i = 0; i < len; i++) {
+                        let row = results.rows.item(i);
+                        data.push(row);
+                    }
+                    return data
                 })
         })
     } catch (e) {

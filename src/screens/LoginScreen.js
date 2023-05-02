@@ -29,13 +29,14 @@ export default function LoginScreen({ navigation }) {
     try {
       const userJson = await AsyncStorage.getItem('user');
       const savedUser = JSON.parse(userJson);
-      console.log('useEffect savedUser ' + JSON.stringify(savedUser));
+      if (userJson != null) {
       setGlobalState({...globalState,user:savedUser});
       setUser(savedUser);
       // Appel de la fonction de connexion
       if (savedUser.id != -1){
       await connection(savedUser);
     }
+  }
     } catch (e) {
       console.log(e);
     }
@@ -53,9 +54,9 @@ export default function LoginScreen({ navigation }) {
             async (tx, results) => {
               var len = results.rows.length;
               if (len > 0) {
-                for (i = 0; i < len; i++) {
+                /*for (i = 0; i < len; i++) {
                   console.log("ID "+results.rows.item(0).ID+" Name: " + results.rows.item(i).Name + " Age: " + results.rows.item(i).Age + " Password: " + results.rows.item(i).Password);
-                }
+                }*/
                 const state = {...user, id: results.rows.item(0).ID, age: results.rows.item(0).Age }
                 setGlobalState({...globalState,user:state})
                 await AsyncStorage.setItem('user', JSON.stringify(state));
