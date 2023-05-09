@@ -8,7 +8,9 @@ Pour executer l'application il faut avoir androide studio de configuré sur l'or
 Se reférer au lien suivant:
 https://reactnative.dev/docs/environment-setup
 Pour lancer l'applie ouvrir le terminal dans Efraire et executer la commande: 
-uniquement la première foi:\n
-'npm install'\n
+uniquement la première foi:
+
+'npm install'
+
 puis à chaque lancement:
 'npm run android'
