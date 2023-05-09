@@ -13,4 +13,5 @@ uniquement la première foi:
 'npm install'
 
 puis à chaque lancement:
+
 'npm run android'
