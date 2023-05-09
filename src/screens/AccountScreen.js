@@ -6,6 +6,7 @@ import { CustomButton } from '../utils/components';
 import db from '../utils/db';
 import { updateData, } from '../utils/queries';
 import { GlobalContext } from '../App';
+import { color } from 'react-native-reanimated';
 
 //fonction qui retourne la page du comte
 export default function AccountScreen ({navigation,route}) {
@@ -61,16 +62,16 @@ export default function AccountScreen ({navigation,route}) {
 
   return (
     <View style = {styles.body}>
-      <View style = {[styles.view,{backgroundColor: '#00000011',}]} >
+      <View style = {{...styles.view,alignItems: 'center'}} >
         <Text style = {styles.title}>Your account {globalState.user.name}</Text>
-        <Text >Username</Text>
+        <Text style={{color:'black'}}>Username</Text>
         <TextInput style={styles.textInput} onChangeText={text => setUser({...user,name:text})} value={user.name} />
-        <Text >Age</Text>
+        <Text style={{color:'black'}} >Age</Text>
         <TextInput style={styles.textInput} onChangeText={text => setUser({...user,age:text})} value={user.age.toString()} />
         <Text >Password</Text>
-        <TextInput style={styles.textInput} onChangeText={text => setPassword(text)} value={user.password} />
+        <TextInput style={styles.textInput} onChangeText={text => setUser({...user,password:text})} value={user.password} />
       </View>
-      <View style = {[styles.view,{backgroundColor: '#333',alignItems: 'center',}]} >
+      <View style = {[styles.view,{alignItems: 'center'}]} >
         <CustomButton style={styles.button} title='Disconnect' onPress={disconnect}/>
         <CustomButton style={styles.button} title='Delete Acount' onPress={removeUser}/>
         <CustomButton style={styles.button} title='Update Acount' onPress={updateUser}/>
