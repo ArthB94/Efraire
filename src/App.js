@@ -1,5 +1,7 @@
 import 'react-native-gesture-handler';
+
 import React,{useState,createContext, useEffect} from 'react';
+
 import  Connection  from './screens/LoginScreen';
 import  SinginScreen from './screens/SigninScreen';
 import  HomeScreen  from './screens/HomeScreen';
@@ -30,6 +32,7 @@ function App() {
   const [globalState, setGlobalState] = useState({
     user: {id:0,name:'',age:'',password:''},
   });
+
   useEffect(() => {
     //dropTable('Users')
     //dropTable('Data')
