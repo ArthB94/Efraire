@@ -10,8 +10,8 @@ https://reactnative.dev/docs/environment-setup
 Pour lancer l'applie ouvrir le terminal dans Efraire et executer la commande: 
 uniquement la première foi:
 
-'npm install'
+'_npm install_'
 
 puis à chaque lancement:
 
-'npm run android'
+'_npm run android_'
