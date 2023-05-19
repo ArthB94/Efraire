@@ -21,12 +21,70 @@ export default function HomeScreen({ route }) {
 
   useEffect(() => {
     //dropData()
+    var time = maDate(new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: '2-digit', day: '2-digit'}),new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' }))
+    var randomH = Math.random()/4 - (1/8);
+    var randomM = Math.random() - 1/2;
+    var randomS = Math.random() * 2 - 1;
+    var randomNumber = randomS + randomM + randomH;
+    const intervalId = setInterval(() => {
+      const formattedDate = new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: '2-digit', day: '2-digit'});
+      const formattedTime = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      const newDate = maDate(formattedDate,formattedTime)
+      
+      if (time.hour != newDate.hour) {
+        const random = Math.random()/60 - (1/120);
+        randomH = random ;
+        time = newDate
+      }
+      if (time.minute != newDate.minute){
+        const random = Math.random()/2 - 1/4;
+        randomM = random  + randomH;
+        time = newDate
+      }
+      if (time.second != newDate.second) {  
+        const random = Math.random() * 2 - 1;
+        randomS += random + randomM+ randomH ;
+        time = newDate
+      }
+      
+      console.log("randomS "+randomS+"\nrandomM "+randomM+"\nrandomH "+randomH);
+      randomNumber = Math.floor(Math.random() * 100) + 1 + randomS + 100;
+      const data =[user.id, formattedDate,formattedTime , randomNumber]
+      addData(data)
+      getData()  
+    }, 1000);
+    return () => clearInterval(intervalId);
+    //trygetdata()
+  },[]);
 
-    getData()  
-   
-
-    //console.log('HomeScreen useEffect' + JSON.stringify(dataSets) );
-  },[load]);
+  /* const trygetdata = async () => {
+    //console.log("i "+i);
+    var randomH = Math.random()/4 - (1/8);
+    var randomM = Math.random() - 1/2;
+    var randomS = Math.random() * 2 - 1;
+    var randomNumber = randomS + randomM + randomH;
+    var data = []
+    for (i = 0; i < 100000; i++) {
+      console.log("i "+i);
+      if (i%1000==0 ) {
+        console.log("--------------------------------"+i);
+        const random = Math.random()/60 - (1/120);
+        randomH = random ;
+      }
+      if (i%60==0){
+        console.log("--------------------------------"+i);
+        const random = Math.random()/2 - 1/4;
+        randomM = random  + randomH;
+      }
+      if (i%1==0) {  
+        const random = Math.random() * 2 - 1;
+        randomS += random + randomM+ randomH ;
+      }
+      randomNumber =  randomS;
+      data.push({x: i, y: randomNumber })
+    } 
+    setDataSets([{ label: "Valeur pour le mois de ", values: data }])
+  }*/
 
   const getData = async () => {
     console.log("getData");
@@ -40,10 +98,8 @@ export default function HomeScreen({ route }) {
             if (len > 0) {
               var data = []
               for (i = 0; i < len; i++) {
-                //console.log("ID " + results.rows.item(i).ID + " UserID: " + results.rows.item(i).UserID + " Date: " + results.rows.item(i).Date + " pollution: " + results.rows.item(i).pollution);
                 const date = maDate(results.rows.item(i).Date,results.rows.item(i).Heure)
-                data.push({x: date.second+60*date.minute+3600*date.hour, y: results.rows.item(i).pollution })
-                console.log("data " + JSON.stringify({data,date}));
+                data.push({x: date.second + 60 * date.minute + 3600 * date.hour, y: results.rows.item(i).pollution })
               }
               setDataSets([{ label: "Valeur pour le mois de ", values: data }])
             }
@@ -62,18 +118,16 @@ export default function HomeScreen({ route }) {
   }
 
   const maDate = (formattedDate,formattedTime)=>{
-    const newdatestring={year:formattedDate.split('/')[0],month:formattedDate.split('/')[1],day:formattedDate.split('/')[2],hour:formattedTime.split(':')[0],minute:formattedTime.split(':')[1],second:formattedTime.split(':')[2]}
-    console.log(JSON.stringify(newdatestring))
-    const newdate ={year:parseInt(formattedDate.split('/')[0]),month:parseInt(formattedDate.split('/')[1]),day:parseInt(formattedDate.split('/')[2]),hour:parseInt(formattedTime.split(':')[0]),minute:parseInt(formattedTime.split(':')[1]),second:parseInt(formattedTime.split(':')[2]) } 
-    console.log("newdate= "+JSON.stringify(newdate))
+    const newdate ={
+      year:parseInt(formattedDate.split('/')[0]),
+      month:parseInt(formattedDate.split('/')[1]),
+      day:parseInt(formattedDate.split('/')[2]),
+      hour:parseInt(formattedTime.split(':')[0]),
+      minute:parseInt(formattedTime.split(':')[1]),
+      second:parseInt(formattedTime.split(':')[2]) } 
     return newdate
-}
-  const addData = async () => {
-    reload(!load)
-    const randomNumber = Math.floor(Math.random() * 100) + 1;
-    const formattedDate = new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: '2-digit', day: '2-digit'});
-    const formattedTime = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    const data =[user.id, formattedDate,formattedTime , randomNumber]
+  }
+  const addData = async (data) => {
     try {
       await db.transaction(async (tx) => {
           await tx.executeSql(
@@ -81,9 +135,7 @@ export default function HomeScreen({ route }) {
               data
           );
       });
-      
-      console.log('Data aded ' + JSON.stringify(data));
-      
+    console.log('Data added ' + JSON.stringify(data));
   }
   catch (e) {
       console.log(e);
@@ -96,14 +148,10 @@ const dropData = async () => {
     await db.transaction(async (tx) => {
         await tx.executeSql(
             'DELETE FROM Data WHERE UserID = ?', [user.id]
-            //data
-        
         );
     });}
     catch (e) {}
   }
-
-
 
 
   return (
@@ -123,8 +171,6 @@ const dropData = async () => {
           <CustomButton style={styles.button} onPress={dropData} title={'dropData'}></CustomButton>
         </View>
       </View>
-
-
     </ScrollView>
   );
 }
