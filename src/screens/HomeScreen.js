@@ -109,21 +109,18 @@ const dropData = async () => {
   return (
     <ScrollView >
       <View style={{
-        height: 500,
-        padding: 20,
-      }}>
-        <View style={styles.body}>
-          <View style={styles.view}>
-            <Text style={styles.title}>Welcome {user.name} you are {user.age} !</Text>
+        height: 800,
+        padding: 10,
+        paddingBottom: 100,
+        backgroundColor:'white'}}>
+        <View style={{...styles.body,paddingTop:20}}>
+          <View style={{...styles.view,alignItems:'center',flex: 0,paddingBottom:50}}>
+            <Text style={{...styles.title,}}>Welcome {user.name}!</Text>
           </View>
-          <Graph style={{
-            flex: 1,
-            width: '100%', flex: 1,
-            padding: 20, borderRadius: 10, backgroundColor: '#00000015'
-          }} dataSets={dataSets}>
+          <Graph style={{...styles.graph,height: 400}} dataSets={dataSets}>
           </Graph>
           <CustomButton style={{...styles.button,text: {...styles.button.text}}} onPress={addData} title={'adddata'}></CustomButton>
-          <CustomButton style={styles.button} onPress={dropData} title={'dropData '+user.id}></CustomButton>
+          <CustomButton style={styles.button} onPress={dropData} title={'dropData'}></CustomButton>
         </View>
       </View>
 

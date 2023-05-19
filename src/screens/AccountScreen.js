@@ -64,11 +64,11 @@ export default function AccountScreen ({navigation,route}) {
     <View style = {styles.body}>
       <View style = {{...styles.view,alignItems: 'center'}} >
         <Text style = {styles.title}>Your account {globalState.user.name}</Text>
-        <Text style={{color:'black'}}>Username</Text>
+        <Text style={styles.text}>Username</Text>
         <TextInput style={styles.textInput} onChangeText={text => setUser({...user,name:text})} value={user.name} />
-        <Text style={{color:'black'}} >Age</Text>
+        <Text style={styles.text} >Age</Text>
         <TextInput style={styles.textInput} onChangeText={text => setUser({...user,age:text})} value={user.age.toString()} />
-        <Text >Password</Text>
+        <Text style={styles.text}>Password</Text>
         <TextInput style={styles.textInput} onChangeText={text => setUser({...user,password:text})} value={user.password} />
       </View>
       <View style = {[styles.view,{alignItems: 'center'}]} >

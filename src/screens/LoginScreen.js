@@ -83,15 +83,15 @@ export default function LoginScreen({ navigation }) {
   
     <View style={styles.body}>
       <Text style={styles.title}>Login</Text>
-      <Text >Username</Text>
+      <Text style={styles.text}>Username</Text>
       <TextInput style={styles.textInput} onChangeText={text => setUser({...user,name:text})} value={user.name} />
-      <Text >Password</Text>
+      <Text style={styles.text}>Password</Text>
       <TextInput style={styles.textInput} secureTextEntry={true} onChangeText={text => setUser({...user,password:text})} value={user.password} />
       <CustomButton style={styles.button} title='Login' onPress={()=>{ 
           if (user.name.length == 0 || user.password.length == 0){ 
           alert('Please fill all the fields')
         } 
-        else {alert('Login') ,connection(user)}}}/>
+        else {connection(user)}}}/>
       <CustomButton style={styles.button} title='CreatUser' onPress={() => { navigation.navigate('Signin', { user: user }) }} />
     </View>
 

@@ -64,11 +64,11 @@ export default function SinginScreen({ navigation }) {
     return (
         <View style={styles.body}>
             <Text style={styles.title}>Signin</Text>
-            <Text >Username</Text>
+            <Text style={styles.text}>Username</Text>
             <TextInput style={styles.textInput} onChangeText={name => setUser({...user,name:name})} value={user.name} />
-            <Text >Age</Text>
+            <Text style={styles.text}>Age</Text>
             <TextInput style={styles.textInput} onChangeText={age => setUser({...user,age:age})} value={user.age.toString()} />
-            <Text >Password</Text>
+            <Text style={styles.text}>Password</Text>
             <TextInput style={styles.textInput} secureTextEntry={true} onChangeText={password => setUser({...user,password:password})} value={user.password} />
             <CustomButton style={styles.button} title='Signin' onPress={setData}/>
         </View>

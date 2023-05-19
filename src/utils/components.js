@@ -19,9 +19,9 @@ export const CustomButton = ({ style,title, onPress }) => {
 
 export const Graph = ({ style,title, dataSets }) => {
     return (
-      <View style={{flex: 1,width: '100%',flex:1,padding: 20,borderRadius:10,backgroundColor:'#00000015'}}>
-        <View style={{width:'100%',flex:1}}>
-            <LineChart style={{flex: 1}} data={{dataSets:dataSets}} descriptionLabel = 'bite'/>
+      <View style={style}>
+        <View style={{width:'100%',flex:1,borderColor:'black'}}>
+            <LineChart style={{flex: 1}} data={{dataSets:dataSets}} descriptionLabel = {title}/>
         </View>
       </View>
     );

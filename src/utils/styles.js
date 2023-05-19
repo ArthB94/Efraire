@@ -6,11 +6,14 @@ export default StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-       // justifyContent: 'center',
+        justifyContent:'flex-start',
+        paddingTop: 100,
+
     },
     view: {
         flex: 1,
         width: '100%',
+        textDecorationColor: 'black',
     },
     title: {
         color: 'black',
@@ -49,11 +52,14 @@ export default StyleSheet.create({
         },
     },
     graph:{
-        ...StyleSheet.view,
-        flex:1,
-        padding: 20,
-        borderRadius: 50,
-        backgroundColor:'green'}
+         width: '100%', 
+         padding: 20,
+         borderRadius: 10, 
+         margin: 20,
+         borderWidth: 0.5,
+         borderColor: 'black',
+         backgroundColor: 'white', 
+          }
     
 
 })
